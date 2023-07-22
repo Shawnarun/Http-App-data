@@ -15,17 +15,34 @@ export class PostService {
 
   }
 
-  findAll(): Observable<any> {
+  /*findAll(): Observable<any> {
     return this.http.get<any>(this.baseUrl + 'posts');
+  }*/
+  findAllDataFireStore() {
+    return this.fireStoreService.collection('post-data').snapshotChanges();
   }
 
-  delete(id: any): Observable<any> {
-    return this.http.delete<any>(this.baseUrl + 'posts/' + id);
+  /* delete(id: any): Observable<any> {
+     return this.http.delete<any>(this.baseUrl + 'posts/' + id);
+   }*/
+
+  deleteDataFireStore(id: any) {
+    return this.fireStoreService.collection('post-data').doc(id).delete();
   }
 
-  find(id: any): Observable<any> {
-    return this.http.get<any>(this.baseUrl + 'posts?id=' + id);
+  /* find(id: any): Observable<any> {
+     return this.http.get<any>(this.baseUrl + 'posts?id=' + id);
+   }*/
+
+  findDataFireStore(id: any) {
+    return this.fireStoreService.collection('post-data').doc(id).valueChanges();
   }
+
+  /*  create(id:any, userId:any, title:any, body:any):Observable<any>{
+      return this.http.post<any>(this.baseUrl+'posts',{
+        id,userId,title,body
+      });
+    }*/
 
   createDataFireStore(post: Post) {
     return new Promise<any>((resolve, reject) => {
@@ -39,14 +56,20 @@ export class PostService {
     });
   }
 
-  /*  create(id:any, userId:any, title:any, body:any):Observable<any>{
-      return this.http.post<any>(this.baseUrl+'posts',{
-        id,userId,title,body
+
+  /*  update(id: any, userId: any, title: any, body: any): Observable<any> {
+      return this.http.put<any>(this.baseUrl + 'posts/' + id, {
+        id, userId, title, body
       });
     }*/
-  update(id: any, userId: any, title: any, body: any): Observable<any> {
-    return this.http.put<any>(this.baseUrl + 'posts/' + id, {
-      id, userId, title, body
-    });
+
+  updateDataFireStore(post: Post) {
+    return this.fireStoreService.collection('post-data')
+      .doc(post.id)
+      .update({
+        userId: post.userId,
+        title: post.title,
+        body: post.body
+      });
   }
 }
