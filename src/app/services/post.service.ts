@@ -45,6 +45,7 @@ export class PostService {
     }*/
 
   createDataFireStore(post: Post) {
+    console.log(post);
     return new Promise<any>((resolve, reject) => {
       this.fireStoreService.collection('post-data')
         .add(post)
